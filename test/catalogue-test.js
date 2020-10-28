@@ -95,4 +95,23 @@ describe("Catalogue", () => {
         expect(rejectedProduct).to.be.undefined; 
       });
     });
+    describe("searchProducts",() => {
+      it("return less the specific product", () => {;
+        cat.removeProductById("A123");
+        const result = cat.searchProducts({price:25});
+        expect(result.result1).to.have.lengthOf(2);
+        expect(result.result1).to.have.members(["A124","A125"]);
+      });
+      it("return the name of product which has the keyword", () => {
+          cat.addProduct(new Product("A001", "caps", 1, 1, 10.0));
+          cat.addProduct(new Product("A002", "uzi", 1, 1, 14.0));
+          cat.addProduct(new Product("A003", "faker", 1, 10, 20.0));
+          const result = cat.searchProducts({keyword:'ca'});
+          expect(result.result1).to.have.lengthOf(1);
+          expect(result.result1).to.have.members(["A001"]);
+      });
+      it("return a bad search when the entry is neither a price nor a key word", () => {
+            expect(() => (cat.searchProducts({key:"widget"})).to.throw("Bad Search"));
+      })
+    });
 });
